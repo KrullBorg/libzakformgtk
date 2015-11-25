@@ -23,6 +23,7 @@
 #include <libzakformgtk/form.h>
 
 #include <libzakformgtk/formelement.h>
+#include <libzakformgtk/formelementcheck.h>
 
 
 #endif /* __LIBZAKFORMGTK_H__ */
