@@ -7,12 +7,14 @@ AM_CPPFLAGS = $(ZAKFORMGTK_CFLAGS) \
 lib_LTLIBRARIES = libzakformgtk.la
 
 libzakformgtk_la_SOURCES = \
-                        form.c
+                        form.c \
+                        formelement.c
 
 libzakformgtk_la_LDFLAGS = -no-undefined
 
 libzakformgtk_include_HEADERS = \
                              libzakformgtk.h \
-                             form.h
+                             form.h \
+                             formelement.h
 
 libzakformgtk_includedir = $(includedir)/libzakformgtk
