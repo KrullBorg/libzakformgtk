@@ -10,7 +10,8 @@ libzakformgtk_la_SOURCES = \
                         form.c \
                         formelement.c \
                         formelementcheck.c \
-                        formelemententry.c
+                        formelemententry.c \
+                        formelementlabel.c
 
 libzakformgtk_la_LDFLAGS = -no-undefined
 
@@ -19,6 +20,7 @@ libzakformgtk_include_HEADERS = \
                              form.h \
                              formelement.h \
                              formelementcheck.h \
-                             formelemententry.h
+                             formelemententry.h \
+                             formelementlabel.h
 
 libzakformgtk_includedir = $(includedir)/libzakformgtk
