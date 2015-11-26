@@ -203,4 +203,6 @@ zak_form_gtk_form_element_check_set_value (ZakFormGtkFormElementCheck *element, 
 	g_free (str_value);
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), active);
+
+	return TRUE;
 }
