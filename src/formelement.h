@@ -25,6 +25,8 @@
 
 #include <gtk/gtk.h>
 
+#include <libxml/tree.h>
+
 #include <libzakform/libzakform.h>
 
 

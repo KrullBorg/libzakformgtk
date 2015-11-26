@@ -12,6 +12,7 @@ libzakformgtk_la_SOURCES = \
                         formelementcheck.c \
                         formelemententry.c \
                         formelementlabel.c \
+                        formelementradio.c \
                         formelementspin.c \
                         formelementtextview.c
 
@@ -24,6 +25,7 @@ libzakformgtk_include_HEADERS = \
                              formelementcheck.h \
                              formelemententry.h \
                              formelementlabel.h \
+                             formelementradio.h \
                              formelementspin.h \
                              formelementtextview.h
 
