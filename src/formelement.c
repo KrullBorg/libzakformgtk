@@ -25,6 +25,7 @@
 enum
 {
 	PROP_0,
+	PROP_GTKBUILDER,
 	PROP_WIDGET,
 	PROP_NAME,
 	PROP_LABEL
@@ -51,11 +52,14 @@ static void zak_form_gtk_form_element_set_visible (ZakFormGtkFormElement *elemen
 static gboolean zak_form_gtk_form_element_get_editable (ZakFormGtkFormElement *element);
 static void zak_form_gtk_form_element_set_editable (ZakFormGtkFormElement *element, gboolean visible);
 
+static void zak_form_gtk_form_element_xml_parsing (ZakFormElement *element, xmlNode *xmlnode);
+
 #define ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT, ZakFormGtkFormElementPrivate))
 
 typedef struct _ZakFormGtkFormElementPrivate ZakFormGtkFormElementPrivate;
 struct _ZakFormGtkFormElementPrivate
 	{
+		GtkBuilder *builder;
 		GtkWidget *widget;
 		gchar *name;
 
@@ -75,12 +79,21 @@ zak_form_gtk_form_element_class_init (ZakFormGtkFormElementClass *class)
 	object_class->dispose = zak_form_gtk_form_element_dispose;
 	object_class->finalize = zak_form_gtk_form_element_finalize;
 
+	class->xml_parsing = zak_form_gtk_form_element_xml_parsing;
+
 	parent_class->get_visible = zak_form_gtk_form_element_get_visible;
 	parent_class->set_visible = zak_form_gtk_form_element_set_visible;
 	parent_class->get_editable = zak_form_gtk_form_element_get_editable;
 	parent_class->set_editable = zak_form_gtk_form_element_set_editable;
 
 	g_type_class_add_private (object_class, sizeof (ZakFormGtkFormElementPrivate));
+
+	g_object_class_install_property (object_class, PROP_GTKBUILDER,
+									 g_param_spec_object ("gtkbuilder",
+														  "GtkBuilder",
+														  "GtkBuilder",
+														  G_TYPE_OBJECT,
+														  G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class, PROP_WIDGET,
 									 g_param_spec_object ("widget",
@@ -109,9 +122,41 @@ zak_form_gtk_form_element_init (ZakFormGtkFormElement *zak_form_gtk_form_element
 {
 	ZakFormGtkFormElementPrivate *priv = ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE (zak_form_gtk_form_element);
 
+	priv->builder = NULL;
 	priv->widget = NULL;
 	priv->name = NULL;
 	priv->label = NULL;
+}
+
+/**
+ * zak_form_gtk_form_element_set_gtkbuilder:
+ * @element:
+ * @gtkbuilder:
+ *
+ */
+void
+zak_form_gtk_form_element_set_gtkbuilder (ZakFormGtkFormElement *element, GtkBuilder *gtkbuilder)
+{
+	ZakFormGtkFormElementPrivate *priv;
+
+	priv = ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE (element);
+
+	priv->builder = gtkbuilder;
+}
+
+/**
+ * zak_form_gtk_form_element_get_gtkbuilder:
+ * @element:
+ *
+ */
+GtkBuilder
+*zak_form_gtk_form_element_get_gtkbuilder (ZakFormGtkFormElement *element)
+{
+	ZakFormGtkFormElementPrivate *priv;
+
+	priv = ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE (element);
+
+	return priv->builder;
 }
 
 /**
@@ -137,12 +182,14 @@ zak_form_gtk_form_element_widget_set_from_gtkbuilder (ZakFormGtkFormElement *ele
 
 	priv = ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE (element);
 
+	priv->builder = gtkbuilder;
+
 	ret = FALSE;
 	w = GTK_WIDGET (gtk_builder_get_object (gtkbuilder, widget_name));
-	if (w != NULL)
+	if (w != NULL
+		&& GTK_IS_WIDGET (w))
 		{
-			priv->widget = g_object_ref (w);
-			priv->name = g_strdup (widget_name);
+			zak_form_gtk_form_element_set_widget (element, w, widget_name);
 			ret = TRUE;
 		}
 	else
@@ -252,6 +299,10 @@ zak_form_gtk_form_element_set_property (GObject *object,
 
 	switch (property_id)
 		{
+		case PROP_GTKBUILDER:
+			zak_form_gtk_form_element_set_gtkbuilder (zak_form_gtk_form_element, (GtkBuilder *)g_value_get_object (value));
+			break;
+
 		case PROP_LABEL:
 			zak_form_gtk_form_element_set_label (zak_form_gtk_form_element, (GtkWidget *)g_value_get_object (value));
 			break;
@@ -273,6 +324,10 @@ zak_form_gtk_form_element_get_property (GObject *object,
 
 	switch (property_id)
 		{
+		case PROP_GTKBUILDER:
+			g_value_set_object (value, (gpointer)zak_form_gtk_form_element_get_gtkbuilder (zak_form_gtk_form_element));
+			break;
+
 		case PROP_LABEL:
 			g_value_set_object (value, (gpointer)zak_form_gtk_form_element_get_label (zak_form_gtk_form_element));
 			break;
@@ -342,4 +397,23 @@ zak_form_gtk_form_element_set_editable (ZakFormGtkFormElement *element, gboolean
 	ZakFormGtkFormElementPrivate *priv = ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE (element);
 
 	gtk_widget_set_sensitive (priv->widget, editable);
+}
+
+static void
+zak_form_gtk_form_element_xml_parsing (ZakFormElement *element, xmlNode *xmlnode)
+{
+	xmlNode *cur;
+
+	ZakFormGtkFormElementPrivate *priv = ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE ((ZakFormGtkFormElement *)element);
+
+	cur = xmlnode->children;
+	while (cur != NULL)
+		{
+			if (xmlStrcmp (cur->name, (const xmlChar *)"widget") == 0)
+				{
+					zak_form_gtk_form_element_widget_set_from_gtkbuilder (ZAK_FORM_GTK_FORM_ELEMENT (element), priv->builder, (gchar *)xmlNodeGetContent (cur));
+				}
+
+			cur = cur->next;
+		}
 }

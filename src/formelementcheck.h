@@ -53,6 +53,8 @@ GType zak_form_gtk_form_element_check_get_type (void);
 
 ZakFormGtkFormElement *zak_form_gtk_form_element_check_new (void);
 
+gboolean zak_form_gtk_form_element_check_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode);
+
 
 G_END_DECLS
 

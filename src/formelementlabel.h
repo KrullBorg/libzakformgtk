@@ -53,6 +53,8 @@ GType zak_form_gtk_form_element_label_get_type (void);
 
 ZakFormGtkFormElement *zak_form_gtk_form_element_label_new (void);
 
+gboolean zak_form_gtk_form_element_label_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode);
+
 
 G_END_DECLS
 

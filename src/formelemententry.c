@@ -89,6 +89,20 @@ ZakFormGtkFormElement
 	return ZAK_FORM_GTK_FORM_ELEMENT (zak_form_gtk_form_element_entry);
 }
 
+/**
+ * zak_form_gtk_form_element_entry_xml_parsing:
+ * @element:
+ * @xmlnode:
+ *
+ */
+gboolean
+zak_form_gtk_form_element_entry_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode)
+{
+	ZAK_FORM_GTK_FORM_ELEMENT_CLASS (zak_form_gtk_form_element_entry_parent_class)->xml_parsing (element, xmlnode);
+
+	return TRUE;
+}
+
 /* PRIVATE */
 static void
 zak_form_gtk_form_element_entry_set_property (GObject *object,

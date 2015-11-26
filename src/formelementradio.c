@@ -113,12 +113,14 @@ zak_form_gtk_form_element_radio_xml_parsing (ZakFormElement *element, xmlNodePtr
 {
 	xmlNode *cur;
 
+	ZAK_FORM_GTK_FORM_ELEMENT_CLASS (zak_form_gtk_form_element_radio_parent_class)->xml_parsing (element, xmlnode);
+
 	cur = xmlnode->children;
 	while (cur != NULL)
 		{
 			if (xmlStrcmp (cur->name, (const xmlChar *)"return-value") == 0)
 				{
-					zak_form_gtk_form_element_radio_set_return_value (element, (gchar *)xmlNodeGetContent (cur));
+					zak_form_gtk_form_element_radio_set_return_value (ZAK_FORM_GTK_FORM_ELEMENT_RADIO (element), (gchar *)xmlNodeGetContent (cur));
 				}
 
 			cur = cur->next;
