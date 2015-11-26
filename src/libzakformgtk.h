@@ -26,6 +26,7 @@
 #include <libzakformgtk/formelementcheck.h>
 #include <libzakformgtk/formelemententry.h>
 #include <libzakformgtk/formelementlabel.h>
+#include <libzakformgtk/formelementspin.h>
 #include <libzakformgtk/formelementtextview.h>
 
 
