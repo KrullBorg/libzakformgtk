@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<zakform>
+
+  <element type="zak_form_gtk_form_element_label">
+	<widget>lbl_id</widget>
+	<label>label8</label>
+  </element>
+
+  <!--<element type="zak_form_gtk_form_element_entry">
+	<widget>txt_name</widget>
+	<label>label1</label>
+  </element>
+
+  <element type="zak_form_gtk_form_element_spin">
+	<widget>spn_age</widget>
+	<label>label4</label>
+  </element>
+
+  <element type="zak_form_gtk_form_element_check">
+	<widget>chk_married</widget>
+	<label>label9</label>
+  </element>
+
+  <element type="zak_form_gtk_form_element_textview">
+	<widget>txtv_description</widget>
+	<label>label10</label>
+  </element>
+
+  <element type="zak_form_gtk_form_element_entry">
+	<widget>txt_birthday</widget>
+	<label>label11</label>
+  </element>
+
+  <element type="zak_form_gtk_form_element_radio">
+	<widget>rbtnNone</widget>
+	<label>label3</label>
+	<return-value></return-value>
+  </element>
+
+  <element type="zak_form_gtk_form_element_radio">
+	<widget>rbtnMale</widget>
+	<label>label3</label>
+	<return-value>M</return-value>
+  </element>
+
+  <element type="zak_form_gtk_form_element_radio">
+	<widget>rbtnFemale</widget>
+	<label>label3</label>
+	<return-value>F</return-value>
+  </element>
+
+  <element type="zak_form_gtk_form_element_entry">
+	<widget>txt_income</widget>
+	<label>label5</label>
+  </element>-->
+
+</zakform>

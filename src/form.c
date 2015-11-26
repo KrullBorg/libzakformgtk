@@ -23,6 +23,7 @@
 #include <syslog.h>
 
 #include "form.h"
+#include "formelement.h"
 
 static void zak_form_gtk_form_class_init (ZakFormGtkFormClass *class);
 static void zak_form_gtk_form_init (ZakFormGtkForm *zak_form_gtk_form);
@@ -39,12 +40,14 @@ static void zak_form_gtk_form_get_property (GObject *object,
 static void zak_form_gtk_form_dispose (GObject *gobject);
 static void zak_form_gtk_form_finalize (GObject *gobject);
 
+static void zak_form_gtk_form_element_added (ZakFormGtkForm *form, ZakFormGtkFormElement *element);
+
 #define ZAK_FORM_GTK_FORM_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), ZAK_FORM_GTK_TYPE_FORM, ZakFormGtkFormPrivate))
 
 typedef struct _ZakFormGtkFormPrivate ZakFormGtkFormPrivate;
 struct _ZakFormGtkFormPrivate
 	{
-		gpointer nothing;
+		GtkBuilder *builder;;
 	};
 
 G_DEFINE_TYPE (ZakFormGtkForm, zak_form_gtk_form, ZAK_FORM_TYPE_FORM)
@@ -53,11 +56,14 @@ static void
 zak_form_gtk_form_class_init (ZakFormGtkFormClass *class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
+	ZakFormFormClass *parent_class = ZAK_FORM_FORM_CLASS (class);
 
 	object_class->set_property = zak_form_gtk_form_set_property;
 	object_class->get_property = zak_form_gtk_form_get_property;
 	object_class->dispose = zak_form_gtk_form_dispose;
 	object_class->finalize = zak_form_gtk_form_finalize;
+
+	parent_class->element_added = zak_form_gtk_form_element_added;
 
 	g_type_class_add_private (object_class, sizeof (ZakFormGtkFormPrivate));
 }
@@ -66,6 +72,8 @@ static void
 zak_form_gtk_form_init (ZakFormGtkForm *zak_form_gtk_form)
 {
 	ZakFormGtkFormPrivate *priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (zak_form_gtk_form);
+
+	priv->builder = NULL;
 }
 
 /**
@@ -84,6 +92,22 @@ ZakFormGtkForm
 	priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (zak_form_gtk_form);
 
 	return zak_form_gtk_form;
+}
+
+/**
+ * zak_form_gtk_form_set_gtkbuilder:
+ * @form:
+ * @builder:
+ *
+ */
+void
+zak_form_gtk_form_set_gtkbuilder (ZakFormGtkForm *form, GtkBuilder *builder)
+{
+	ZakFormGtkFormPrivate *priv;
+
+	priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (form);
+
+	priv->builder = builder;
 }
 
 /* PRIVATE */
@@ -141,4 +165,12 @@ zak_form_gtk_form_finalize (GObject *gobject)
 
 	GObjectClass *parent_class = g_type_class_peek_parent (G_OBJECT_GET_CLASS (gobject));
 	parent_class->finalize (gobject);
+}
+
+static void
+zak_form_gtk_form_element_added (ZakFormGtkForm *form, ZakFormGtkFormElement *element)
+{
+	ZakFormGtkFormPrivate *priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (form);
+
+	zak_form_gtk_form_element_set_gtkbuilder (element, priv->builder);
 }

@@ -22,6 +22,8 @@
 
 #include <glib-object.h>
 
+#include <gtk/gtk.h>
+
 #include <libzakform/libzakform.h>
 
 
@@ -38,6 +40,8 @@ struct _ZakFormGtkFormClass
 
 
 ZakFormGtkForm *zak_form_gtk_form_new (void);
+
+void zak_form_gtk_form_set_gtkbuilder (ZakFormGtkForm *form, GtkBuilder *builder);
 
 
 G_END_DECLS

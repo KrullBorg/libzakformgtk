@@ -47,7 +47,7 @@ struct _ZakFormGtkFormElementClass
 void zak_form_gtk_form_element_set_gtkbuilder (ZakFormGtkFormElement *element, GtkBuilder *gtkbuilder);
 GtkBuilder *zak_form_gtk_form_element_get_gtkbuilder (ZakFormGtkFormElement *element);
 
-gboolean zak_form_gtk_form_element_widget_set_from_gtkbuilder (ZakFormGtkFormElement *element,
+gboolean zak_form_gtk_form_element_set_widget_from_gtkbuilder (ZakFormGtkFormElement *element,
 															   GtkBuilder *gtkbuilder,
 															   const gchar *widget_name);
 

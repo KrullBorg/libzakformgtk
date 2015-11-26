@@ -114,7 +114,7 @@ zak_form_gtk_form_element_class_init (ZakFormGtkFormElementClass *class)
 														  "Label",
 														  "Label",
 														  GTK_TYPE_WIDGET,
-														  G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+														  G_PARAM_READWRITE));
 }
 
 static void
@@ -160,14 +160,14 @@ GtkBuilder
 }
 
 /**
- * zak_form_gtk_form_element_widget_set_from_gtkbuilder:
+ * zak_form_gtk_form_element_set_widget_from_gtkbuilder:
  * @element:
  * @gtkbuilder:
  * @widget_name:
  *
  */
 gboolean
-zak_form_gtk_form_element_widget_set_from_gtkbuilder (ZakFormGtkFormElement *element,
+zak_form_gtk_form_element_set_widget_from_gtkbuilder (ZakFormGtkFormElement *element,
 													  GtkBuilder *gtkbuilder,
 													  const gchar *widget_name)
 {
@@ -411,7 +411,12 @@ zak_form_gtk_form_element_xml_parsing (ZakFormElement *element, xmlNode *xmlnode
 		{
 			if (xmlStrcmp (cur->name, (const xmlChar *)"widget") == 0)
 				{
-					zak_form_gtk_form_element_widget_set_from_gtkbuilder (ZAK_FORM_GTK_FORM_ELEMENT (element), priv->builder, (gchar *)xmlNodeGetContent (cur));
+					zak_form_gtk_form_element_set_widget_from_gtkbuilder (ZAK_FORM_GTK_FORM_ELEMENT (element), priv->builder, (gchar *)xmlNodeGetContent (cur));
+				}
+			else if (xmlStrcmp (cur->name, (const xmlChar *)"label") == 0)
+				{
+					zak_form_gtk_form_element_set_label (ZAK_FORM_GTK_FORM_ELEMENT (element),
+														 GTK_WIDGET (gtk_builder_get_object (priv->builder, (gchar *)xmlNodeGetContent (cur))));
 				}
 
 			cur = cur->next;
