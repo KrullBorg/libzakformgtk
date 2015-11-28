@@ -195,7 +195,7 @@ zak_form_gtk_form_element_check_set_value (ZakFormGtkFormElementCheck *element, 
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	str_value = g_strstrip (g_strdup (zak_form_gtk_form_element_check_get_value (element)));
+	str_value = g_strstrip (g_strdup (value));
 
 	if (strcmp (str_value, "0") == 0
 	    || strcasecmp (str_value, "f") == 0

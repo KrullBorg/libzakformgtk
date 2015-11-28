@@ -31,7 +31,9 @@ main (int argc, char *argv[])
 	gtk_init (&argc, &argv);
 
 	builder = gtk_builder_new ();
-	gtk_builder_add_objects_from_file (builder, GUIDIR "/test.ui", g_strsplit ("w_main", "|", -1), NULL);
+	gtk_builder_add_objects_from_file (builder, GUIDIR "/test.ui",
+									   g_strsplit ("w_main"
+												   "|adjustment1", "|", -1), NULL);
 
 	w = GTK_WIDGET (gtk_builder_get_object (builder, "w_main"));
 
@@ -41,6 +43,7 @@ main (int argc, char *argv[])
 	form = zak_form_gtk_form_new ();
 	zak_form_gtk_form_set_gtkbuilder (form, builder);
 	zak_form_form_load_from_file (ZAK_FORM_FORM (form), GUIDIR "/test.xml");
+	zak_form_form_clear (ZAK_FORM_FORM (form));
 
 	gtk_widget_show_all (w);
 

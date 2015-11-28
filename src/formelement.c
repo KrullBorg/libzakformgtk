@@ -406,6 +406,8 @@ zak_form_gtk_form_element_xml_parsing (ZakFormElement *element, xmlNode *xmlnode
 
 	ZakFormGtkFormElementPrivate *priv = ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE ((ZakFormGtkFormElement *)element);
 
+	ZAK_FORM_ELEMENT_GET_CLASS (element)->xml_parsing (element, xmlnode);
+
 	cur = xmlnode->children;
 	while (cur != NULL)
 		{

@@ -77,7 +77,7 @@ zak_form_gtk_form_element_radio_class_init (ZakFormGtkFormElementRadioClass *kla
 	                                                      "Return value",
 	                                                      "Return value",
 	                                                      "",
-	                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+	                                                      G_PARAM_READWRITE));
 }
 
 static void
@@ -85,6 +85,7 @@ zak_form_gtk_form_element_radio_init (ZakFormGtkFormElementRadio *zak_form_gtk_f
 {
 	ZakFormGtkFormElementRadioPrivate *priv = ZAK_FORM_GTK_FORM_ELEMENT_RADIO_GET_PRIVATE (zak_form_gtk_form_element_radio);
 
+	priv->return_value = g_strdup ("");
 }
 
 /**
@@ -179,7 +180,7 @@ zak_form_gtk_form_element_radio_set_property (GObject *object,
 	switch (property_id)
 		{
 		case PROP_RETURN_VALUE:
-			zak_form_gtk_form_element_radio_set_value (zak_form_gtk_form_element_radio, g_value_get_string (value));
+			zak_form_gtk_form_element_radio_set_return_value (zak_form_gtk_form_element_radio, g_value_get_string (value));
 			break;
 
 		default:
@@ -200,7 +201,7 @@ zak_form_gtk_form_element_radio_get_property (GObject *object,
 	switch (property_id)
 		{
 		case PROP_RETURN_VALUE:
-			g_value_set_string (value, zak_form_gtk_form_element_radio_get_value (zak_form_gtk_form_element_radio));
+			g_value_set_string (value, zak_form_gtk_form_element_radio_get_return_value (zak_form_gtk_form_element_radio));
 			break;
 
 		default:

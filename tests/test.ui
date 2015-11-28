@@ -2,6 +2,11 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkWindow" id="w_main">
     <property name="can_focus">False</property>
     <child>
@@ -86,12 +91,12 @@
               <object class="GtkSpinButton" id="spn_age">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="max_length">6</property>
                 <property name="text" translatable="yes">1</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="secondary_icon_activatable">False</property>
-                <property name="adjustment">adjustment2</property>
+                <property name="adjustment">adjustment1</property>
                 <property name="climb_rate">1</property>
-                <property name="value">1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>

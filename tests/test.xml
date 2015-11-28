@@ -2,26 +2,34 @@
 <zakform>
 
   <element type="zak_form_gtk_form_element_label">
+	<default-value>999</default-value>
 	<widget>lbl_id</widget>
 	<label>label8</label>
   </element>
 
-  <!--<element type="zak_form_gtk_form_element_entry">
+  <element type="zak_form_gtk_form_element_entry">
+	<default-value>John Doe</default-value>
 	<widget>txt_name</widget>
 	<label>label1</label>
   </element>
 
   <element type="zak_form_gtk_form_element_spin">
+	<default-value>33</default-value>
 	<widget>spn_age</widget>
 	<label>label4</label>
   </element>
 
   <element type="zak_form_gtk_form_element_check">
+	<default-value>TRUE</default-value>
 	<widget>chk_married</widget>
 	<label>label9</label>
   </element>
 
   <element type="zak_form_gtk_form_element_textview">
+	<default-value>dafault value for textview
+with line break
+and					 some 		 tabs
+	and ' ' ' ' ' ' ' ' ?? ? ? ? ?? * * * * </default-value>
 	<widget>txtv_description</widget>
 	<label>label10</label>
   </element>
@@ -32,18 +40,21 @@
   </element>
 
   <element type="zak_form_gtk_form_element_radio">
+	<default-value>M</default-value>
 	<widget>rbtnNone</widget>
 	<label>label3</label>
 	<return-value></return-value>
   </element>
 
   <element type="zak_form_gtk_form_element_radio">
+	<default-value>M</default-value>
 	<widget>rbtnMale</widget>
 	<label>label3</label>
 	<return-value>M</return-value>
   </element>
 
   <element type="zak_form_gtk_form_element_radio">
+	<default-value>M</default-value>
 	<widget>rbtnFemale</widget>
 	<label>label3</label>
 	<return-value>F</return-value>
@@ -52,6 +63,6 @@
   <element type="zak_form_gtk_form_element_entry">
 	<widget>txt_income</widget>
 	<label>label5</label>
-  </element>-->
+  </element>
 
 </zakform>
