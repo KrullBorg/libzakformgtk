@@ -47,6 +47,7 @@ static void zak_form_gtk_form_element_added (ZakFormGtkForm *form, ZakFormGtkFor
 typedef struct _ZakFormGtkFormPrivate ZakFormGtkFormPrivate;
 struct _ZakFormGtkFormPrivate
 	{
+		GPtrArray *ar_elements;
 		GtkBuilder *builder;;
 	};
 
@@ -73,6 +74,7 @@ zak_form_gtk_form_init (ZakFormGtkForm *zak_form_gtk_form)
 {
 	ZakFormGtkFormPrivate *priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (zak_form_gtk_form);
 
+	priv->ar_elements = ZAK_FORM_FORM_CLASS (zak_form_gtk_form_parent_class)->get_elements (ZAK_FORM_FORM (zak_form_gtk_form));
 	priv->builder = NULL;
 }
 
@@ -108,6 +110,74 @@ zak_form_gtk_form_set_gtkbuilder (ZakFormGtkForm *form, GtkBuilder *builder)
 	priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (form);
 
 	priv->builder = builder;
+}
+
+/**
+ * zak_form_gtk_form_is_valid:
+ * @form:
+ * @parent_window:
+ *
+ */
+gboolean
+zak_form_gtk_form_is_valid (ZakFormGtkForm *form, GtkWidget *parent_window)
+{
+	gboolean ret;
+
+	guint i;
+	GString *str;
+	guint m;
+
+	GtkWidget *w_to_focus;
+
+	g_return_val_if_fail (parent_window != NULL ? GTK_IS_WINDOW (parent_window) : TRUE, FALSE);
+
+	ZakFormGtkFormPrivate *priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (form);
+
+	ret = zak_form_form_is_valid (ZAK_FORM_FORM (form));
+
+	if (!ret)
+		{
+			w_to_focus = NULL;
+			str = g_string_new ("");
+
+			/* collect error messages */
+			for (i = 0; i < priv->ar_elements->len; i++)
+				{
+					GPtrArray *ar_messages = zak_form_element_get_messages ((ZakFormElement *)g_ptr_array_index (priv->ar_elements, i));
+					if (ar_messages != NULL)
+						{
+							if (w_to_focus == NULL)
+								{
+									w_to_focus = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT ((ZakFormElement *)g_ptr_array_index (priv->ar_elements, i)));
+								}
+
+							for (m = 0; m < ar_messages->len; m++)
+								{
+									g_string_append_printf (str, "\n - %s", (gchar *)g_ptr_array_index (ar_messages, m));
+								}
+						}
+				}
+
+			if (g_strcmp0 (str->str, "") != 0)
+				{
+					GtkWidget *dialog;
+
+					dialog = gtk_message_dialog_new (GTK_WINDOW (parent_window),
+													 GTK_DIALOG_DESTROY_WITH_PARENT,
+													 GTK_MESSAGE_WARNING,
+													 GTK_BUTTONS_OK,
+													 str->str);
+					gtk_dialog_run (GTK_DIALOG (dialog));
+					gtk_widget_destroy (dialog);
+
+					if (w_to_focus != NULL)
+						{
+							gtk_widget_grab_focus (w_to_focus);
+						}
+				}
+		}
+
+	return ret;
 }
 
 /* PRIVATE */

@@ -43,6 +43,8 @@ ZakFormGtkForm *zak_form_gtk_form_new (void);
 
 void zak_form_gtk_form_set_gtkbuilder (ZakFormGtkForm *form, GtkBuilder *builder);
 
+gboolean zak_form_gtk_form_is_valid (ZakFormGtkForm *form, GtkWidget *parent_window);
+
 
 G_END_DECLS
 
