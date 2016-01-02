@@ -127,6 +127,8 @@ zak_form_gtk_form_is_valid (ZakFormGtkForm *form, GtkWidget *parent_window)
 
 	GtkWidget *w_to_focus;
 
+	GPtrArray *ar_messages;
+
 	g_return_val_if_fail (parent_window != NULL ? GTK_IS_WINDOW (parent_window) : TRUE, FALSE);
 
 	ZakFormGtkFormPrivate *priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (form);
@@ -141,7 +143,7 @@ zak_form_gtk_form_is_valid (ZakFormGtkForm *form, GtkWidget *parent_window)
 			/* collect error messages */
 			for (i = 0; i < priv->ar_elements->len; i++)
 				{
-					GPtrArray *ar_messages = zak_form_element_get_messages ((ZakFormElement *)g_ptr_array_index (priv->ar_elements, i));
+					ar_messages = zak_form_element_get_messages ((ZakFormElement *)g_ptr_array_index (priv->ar_elements, i));
 					if (ar_messages != NULL)
 						{
 							if (w_to_focus == NULL)
@@ -153,6 +155,15 @@ zak_form_gtk_form_is_valid (ZakFormGtkForm *form, GtkWidget *parent_window)
 								{
 									g_string_append_printf (str, "\n - %s", (gchar *)g_ptr_array_index (ar_messages, m));
 								}
+						}
+				}
+
+			ar_messages = zak_form_form_get_messages (ZAK_FORM_FORM (form));
+			if (ar_messages != NULL)
+				{
+					for (m = 0; m < ar_messages->len; m++)
+						{
+							g_string_append_printf (str, "\n - %s", (gchar *)g_ptr_array_index (ar_messages, m));
 						}
 				}
 
