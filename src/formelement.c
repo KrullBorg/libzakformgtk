@@ -285,6 +285,9 @@ zak_form_gtk_form_element_set_label (ZakFormGtkFormElement *element, GtkWidget *
 			g_object_unref (priv->label);
 		}
 	priv->label = g_object_ref (label);
+
+	zak_form_element_set_long_name (ZAK_FORM_ELEMENT (element),
+									gtk_label_get_text (GTK_LABEL (priv->label)));
 }
 
 /* PRIVATE */

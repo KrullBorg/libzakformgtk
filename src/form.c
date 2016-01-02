@@ -143,17 +143,22 @@ zak_form_gtk_form_is_valid (ZakFormGtkForm *form, GtkWidget *parent_window)
 			/* collect error messages */
 			for (i = 0; i < priv->ar_elements->len; i++)
 				{
-					ar_messages = zak_form_element_get_messages ((ZakFormElement *)g_ptr_array_index (priv->ar_elements, i));
+					ZakFormElement *element;
+
+					element = (ZakFormElement *)g_ptr_array_index (priv->ar_elements, i);
+					ar_messages = zak_form_element_get_messages (element);
 					if (ar_messages != NULL)
 						{
 							if (w_to_focus == NULL)
 								{
-									w_to_focus = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT ((ZakFormElement *)g_ptr_array_index (priv->ar_elements, i)));
+									w_to_focus = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 								}
 
 							for (m = 0; m < ar_messages->len; m++)
 								{
-									g_string_append_printf (str, "\n - %s", (gchar *)g_ptr_array_index (ar_messages, m));
+									g_string_append_printf (str, "\n - «%s»: %s",
+															zak_form_element_get_long_name (element),
+															(gchar *)g_ptr_array_index (ar_messages, m));
 								}
 						}
 				}
