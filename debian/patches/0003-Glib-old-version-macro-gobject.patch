@@ -1,0 +1,65 @@
+From: Andrea Zagli <azagli@libero.it>
+Date: Sun, 29 May 2016 12:23:13 +0200
+Subject: Glib old version - macro gobject.
+
+---
+ src/form.h        | 17 +++++++++++++++--
+ src/formelement.h | 17 +++++++++++++++--
+ 2 files changed, 30 insertions(+), 4 deletions(-)
+
+diff --git a/src/form.h b/src/form.h
+index 381251b..427a8f7 100644
+--- a/src/form.h
++++ b/src/form.h
+@@ -30,8 +30,21 @@
+ G_BEGIN_DECLS
+
+
+-#define ZAK_FORM_GTK_TYPE_FORM zak_form_gtk_form_get_type ()
+-G_DECLARE_DERIVABLE_TYPE (ZakFormGtkForm, zak_form_gtk_form, ZAK_FORM_GTK, FORM, ZakFormForm)
++#define ZAK_FORM_GTK_TYPE_FORM                 (zak_form_gtk_form_get_type ())
++#define ZAK_FORM_GTK_FORM(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZAK_FORM_GTK_TYPE_FORM, ZakFormGtkForm))
++#define ZAK_FORM_GTK_FORM_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), ZAK_FORM_GTK_TYPE_FORM, ZakFormGtkFormClass))
++#define ZAK_FORM_GTK_IS_FORM(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZAK_FORM_GTK_TYPE_FORM))
++#define ZAK_FORM_GTK_IS_FORM_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), ZAK_FORM_GTK_TYPE_FORM))
++#define ZAK_FORM_GTK_FORM_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), ZAK_FORM_GTK_TYPE_FORM, ZakFormGtkFormClass))
++
++
++typedef struct _ZakFormGtkForm ZakFormGtkForm;
++typedef struct _ZakFormGtkFormClass ZakFormGtkFormClass;
++
++struct _ZakFormGtkForm
++	{
++		ZakFormForm parent;
++	};
+
+ struct _ZakFormGtkFormClass
+ {
+diff --git a/src/formelement.h b/src/formelement.h
+index 91a71cb..f72217b 100644
+--- a/src/formelement.h
++++ b/src/formelement.h
+@@ -33,8 +33,21 @@
+ G_BEGIN_DECLS
+
+
+-#define ZAK_FORM_GTK_TYPE_FORM_ELEMENT zak_form_gtk_form_element_get_type ()
+-G_DECLARE_DERIVABLE_TYPE (ZakFormGtkFormElement, zak_form_gtk_form_element, ZAK_FORM_GTK, FORM_ELEMENT, ZakFormElement)
++#define ZAK_FORM_GTK_TYPE_FORM_ELEMENT                 (zak_form_gtk_form_element_get_type ())
++#define ZAK_FORM_GTK_FORM_ELEMENT(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT, ZakFormGtkFormElement))
++#define ZAK_FORM_GTK_FORM_ELEMENT_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), ZAK_FORM_GTK_TYPE_FORM_ELEMENT, ZakFormGtkFormElementClass))
++#define ZAK_FORM_GTK_IS_FORM_ELEMENT(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT))
++#define ZAK_FORM_GTK_IS_FORM_ELEMENT_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), ZAK_FORM_GTK_TYPE_FORM_ELEMENT))
++#define ZAK_FORM_GTK_FORM_ELEMENT_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT, ZakFormGtkFormElementClass))
++
++
++typedef struct _ZakFormGtkFormElement ZakFormGtkFormElement;
++typedef struct _ZakFormGtkFormElementClass ZakFormGtkFormElementClass;
++
++struct _ZakFormGtkFormElement
++	{
++		ZakFormElement parent;
++	};
+
+ struct _ZakFormGtkFormElementClass
+ 	{
