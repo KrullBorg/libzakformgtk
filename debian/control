@@ -1,0 +1,24 @@
+Source: libzakformgtk
+Priority: optional
+Maintainer: Andrea Zagli <azagli@libero.it>
+Build-Depends: debhelper (>=9), libzakutils-dev, intltool, pkg-config, gtk-doc-tools, libzakform-dev, libgtk-3-dev
+Standards-Version: 3.9.8
+Section: libs
+Homepage: https://saetta.ns0.it
+#Vcs-Git: git://anonscm.debian.org/collab-maint/libzakformgtk.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/libzakformgtk.git
+
+Package: libzakformgtk-dev
+Section: libdevel
+Architecture: any
+Depends: libzakformgtk (= ${binary:Version}), ${misc:Depends}, libzakform-dev, libgtk-3-dev
+Description: Plugin for libzakform to use with Gtk+ - dev files
+ Plugin for libzakform to use with Gtk+.
+ .
+ Development files.
+
+Package: libzakformgtk
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libzakform, libgtk-3-0
+Description: Plugin for libzakform to use with Gtk+.
+ Plugin for libzakform to use with Gtk+.

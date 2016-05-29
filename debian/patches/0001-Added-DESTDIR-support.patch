@@ -1,0 +1,32 @@
+From: Andrea Zagli <azagli@libero.it>
+Date: Sun, 29 May 2016 11:57:16 +0200
+Subject: Added DESTDIR support.
+
+---
+ src/Makefile.am | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 5acf7be..9164ff5 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -6,7 +6,7 @@ libmodulesext = .so
+ libmodulesdir = $(libdir)
+ endif
+ 
+-libzakformmodulesdir = `pkg-config --variable=modulesdir libzakform`
++libzakformmodulesdir = $(DESTDIR)`pkg-config --variable=modulesdir libzakform`
+ 
+ LIBS = $(ZAKFORMGTK_LIBS)
+ 
+@@ -42,8 +42,8 @@ libzakformgtk_include_HEADERS = \
+ libzakformgtk_includedir = $(includedir)/libzakformgtk
+ 
+ install-exec-hook:
+-	cd $(libzakformmodulesdir) && \
+-	ln -s -f $(libmodulesdir)/libzakformgtk$(libmodulesext) .
++	mkdir -p $(libzakformmodulesdir)
++	ln -s -f -t $(libzakformmodulesdir) $(libmodulesdir)/libzakformgtk$(libmodulesext)
+ 
+ uninstall-hook:
+ 	rm -f $(libzakformmodulesdir)/libzakformgtk$(libmodulesext)
