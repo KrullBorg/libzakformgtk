@@ -1,5 +1,11 @@
-libzakformgtk (0.0.1-1) UNRELEASED; urgency=medium
+libzakformgtk (0.0.1-2~1.gbpad3728) UNRELEASED; urgency=medium
 
+  ** SNAPSHOT build @ad37280acdfbb6126425a90687e92e33d060f423 **
+
+  [ Andrea Zagli ]
   * Initial release
+  * Debian pkg: adjustments for wheezy.
 
- -- Andrea Zagli <azagli@libero.it>  Sun, 29 May 2016 11:44:29 +0200
+  [ tux ]
+
+ -- Andrea Zagli <azagli@libero.it>  Thu, 28 Jul 2016 15:41:39 +0200
