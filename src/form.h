@@ -45,6 +45,8 @@ void zak_form_gtk_form_set_gtkbuilder (ZakFormGtkForm *form, GtkBuilder *builder
 
 gboolean zak_form_gtk_form_is_valid (ZakFormGtkForm *form, GtkWidget *parent_window);
 
+GObject **zak_form_gtk_form_get_gobjects_by_name (ZakFormGtkForm *form, ...);
+
 
 G_END_DECLS
 
