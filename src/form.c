@@ -194,6 +194,67 @@ zak_form_gtk_form_is_valid (ZakFormGtkForm *form, GtkWidget *parent_window)
 	return ret;
 }
 
+/**
+ * zak_form_gtk_form_get_gobjects_by_name:
+ * @form: a #ZakFormGtkForm object.
+ * @...: a NULL terminated list of objects name (gchar *) to return.
+ *
+ * Returns: an array of #GObject present in the #GtkBuilder object assigned to
+ * the form. Must be free.
+ */
+GObject
+**zak_form_gtk_form_get_gobjects_by_name (ZakFormGtkForm *form, ...)
+{
+	GObject **ret;
+
+	ZakFormGtkFormPrivate *priv;
+
+	va_list vargs;
+	gchar *object_name;
+	guint l;
+
+	GObject *object;
+
+	g_return_val_if_fail (ZAK_FORM_GTK_IS_FORM (form), NULL);
+
+	priv = ZAK_FORM_GTK_FORM_GET_PRIVATE (form);
+
+	g_return_val_if_fail (GTK_IS_BUILDER (priv->builder), NULL);
+
+	ret = NULL;
+	l = 0;
+
+	va_start (vargs, form);
+
+	while ((object_name = va_arg (vargs, gchar *)) != NULL)
+		{
+			l++;
+			if (l == 1)
+				{
+					ret = g_malloc (sizeof (GObject *));
+				}
+			else
+				{
+					ret = g_realloc (ret, l * sizeof (GObject *));
+				}
+
+			object = gtk_builder_get_object (priv->builder, object_name);
+			if (G_IS_OBJECT (object))
+				{
+					ret[l - 1] = object;
+				}
+			else
+				{
+					ret[l - 1] = NULL;
+					g_warning ("Object «%s» not found.", object_name);
+				}
+		}
+
+	va_end (vargs);
+
+	return ret;
+}
+
 /* PRIVATE */
 static void
 zak_form_gtk_form_set_property (GObject *object,
