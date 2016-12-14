@@ -1,5 +1,10 @@
-libzakformgtk (0.0.1-1) UNRELEASED; urgency=medium
+libzakformgtk (0.0.1-1~1.gbp745740) UNRELEASED; urgency=medium
 
+  ** SNAPSHOT build @745740d9765d79c15516bd8295ebcd16634bc589 **
+
+  [ Andrea Zagli ]
   * Initial release
+
+  [ tux ]
 
  -- Andrea Zagli <azagli@libero.it>  Sun, 29 May 2016 11:44:29 +0200
