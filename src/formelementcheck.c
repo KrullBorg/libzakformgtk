@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Andrea Zagli <azagli@libero.it>
+ * Copyright (C) 2015-2017 Andrea Zagli <azagli@libero.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,25 +20,27 @@
 	#include <config.h>
 #endif
 
+#include <libzakutils/libzakutils.h>
+
 #include "formelementcheck.h"
 
 static void zak_form_gtk_form_element_check_class_init (ZakFormGtkFormElementCheckClass *class);
 static void zak_form_gtk_form_element_check_init (ZakFormGtkFormElementCheck *zak_form_gtk_form_element_check);
 
 static void zak_form_gtk_form_element_check_set_property (GObject *object,
-                               guint property_id,
-                               const GValue *value,
-                               GParamSpec *pspec);
+                                                          guint property_id,
+                                                          const GValue *value,
+                                                          GParamSpec *pspec);
 static void zak_form_gtk_form_element_check_get_property (GObject *object,
-                               guint property_id,
-                               GValue *value,
-                               GParamSpec *pspec);
+                                                          guint property_id,
+                                                          GValue *value,
+                                                          GParamSpec *pspec);
 
 static void zak_form_gtk_form_element_check_dispose (GObject *gobject);
 static void zak_form_gtk_form_element_check_finalize (GObject *gobject);
 
-static gchar *zak_form_gtk_form_element_check_get_value (ZakFormGtkFormElementCheck *element);
-static gboolean zak_form_gtk_form_element_check_set_value (ZakFormGtkFormElementCheck *element, const gchar *value);
+static GValue *zak_form_gtk_form_element_check_get_value (ZakFormGtkFormElementCheck *element);
+static gboolean zak_form_gtk_form_element_check_set_value (ZakFormGtkFormElementCheck *element, GValue *value);
 
 #define ZAK_FORM_GTK_FORM_ELEMENT_CHECK_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT_CHECK, ZakFormGtkFormElementCheckPrivate))
 
@@ -162,31 +164,31 @@ zak_form_gtk_form_element_check_finalize (GObject *gobject)
 	parent_class->finalize (gobject);
 }
 
-static gchar
+static GValue
 *zak_form_gtk_form_element_check_get_value (ZakFormGtkFormElementCheck *element)
 {
-	gchar *ret;
+	GValue *ret;
 
 	GtkWidget *w;
 
-	ret = g_strdup ("FALSE");
+	ret = zak_utils_gvalue_new_string ("FALSE");
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
 		{
-			ret = g_strdup ("TRUE");
+			g_value_set_string (ret, "TRUE");
 		}
 	else if (gtk_toggle_button_get_inconsistent (GTK_TOGGLE_BUTTON (w)))
 		{
-			ret = g_strdup ("");
+			g_value_set_string (ret, "");
 		}
 
 	return ret;
 }
 
 static gboolean
-zak_form_gtk_form_element_check_set_value (ZakFormGtkFormElementCheck *element, const gchar *value)
+zak_form_gtk_form_element_check_set_value (ZakFormGtkFormElementCheck *element, GValue *value)
 {
 	GtkWidget *w;
 
@@ -195,7 +197,7 @@ zak_form_gtk_form_element_check_set_value (ZakFormGtkFormElementCheck *element, 
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	str_value = g_strstrip (g_strdup (value));
+	str_value = g_strstrip (g_strdup (g_value_get_string (value)));
 
 	if (strcmp (str_value, "0") == 0
 	    || strcasecmp (str_value, "f") == 0

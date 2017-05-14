@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Andrea Zagli <azagli@libero.it>
+ * Copyright (C) 2015-2017 Andrea Zagli <azagli@libero.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,8 @@
 	#include <config.h>
 #endif
 
+#include <libzakutils/libzakutils.h>
+
 #include "formelementradio.h"
 
 enum
@@ -32,19 +34,19 @@ static void zak_form_gtk_form_element_radio_class_init (ZakFormGtkFormElementRad
 static void zak_form_gtk_form_element_radio_init (ZakFormGtkFormElementRadio *zak_form_gtk_form_element_radio);
 
 static void zak_form_gtk_form_element_radio_set_property (GObject *object,
-                               guint property_id,
-                               const GValue *value,
-                               GParamSpec *pspec);
+                                                          guint property_id,
+                                                          const GValue *value,
+                                                          GParamSpec *pspec);
 static void zak_form_gtk_form_element_radio_get_property (GObject *object,
-                               guint property_id,
-                               GValue *value,
-                               GParamSpec *pspec);
+                                                          guint property_id,
+                                                          GValue *value,
+                                                          GParamSpec *pspec);
 
 static void zak_form_gtk_form_element_radio_dispose (GObject *gobject);
 static void zak_form_gtk_form_element_radio_finalize (GObject *gobject);
 
-static gchar *zak_form_gtk_form_element_radio_get_value (ZakFormGtkFormElementRadio *element);
-static gboolean zak_form_gtk_form_element_radio_set_value (ZakFormGtkFormElementRadio *element, const gchar *value);
+static GValue *zak_form_gtk_form_element_radio_get_value (ZakFormGtkFormElementRadio *element);
+static gboolean zak_form_gtk_form_element_radio_set_value (ZakFormGtkFormElementRadio *element, GValue *value);
 
 #define ZAK_FORM_GTK_FORM_ELEMENT_RADIO_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT_RADIO, ZakFormGtkFormElementRadioPrivate))
 
@@ -234,10 +236,10 @@ zak_form_gtk_form_element_radio_finalize (GObject *gobject)
 	parent_class->finalize (gobject);
 }
 
-static gchar
+static GValue
 *zak_form_gtk_form_element_radio_get_value (ZakFormGtkFormElementRadio *element)
 {
-	gchar *ret;
+	GValue *ret;
 
 	GtkWidget *w;
 
@@ -245,16 +247,19 @@ static gchar
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	ret = g_strdup ("");
+	ret = zak_utils_gvalue_new_string ("");
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (w));
 	while (group != NULL)
 		{
 			if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (group->data)))
 				{
-					ret = (gchar *)g_object_get_data (G_OBJECT (group->data), "return-value");
-					if (ret == NULL)
+					if ((gchar *)g_object_get_data (G_OBJECT (group->data), "return-value") == NULL)
 						{
-							ret = g_strdup ("");
+							g_value_set_string (ret, (gchar *)g_object_get_data (G_OBJECT (group->data), "return-value"));
+						}
+					else
+						{
+							g_value_set_string (ret, "");
 						}
 					break;
 				}
@@ -266,7 +271,7 @@ static gchar
 }
 
 static gboolean
-zak_form_gtk_form_element_radio_set_value (ZakFormGtkFormElementRadio *element, const gchar *value)
+zak_form_gtk_form_element_radio_set_value (ZakFormGtkFormElementRadio *element, GValue *value)
 {
 	GtkWidget *w;
 
@@ -277,7 +282,7 @@ zak_form_gtk_form_element_radio_set_value (ZakFormGtkFormElementRadio *element, 
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (w));
 	while (group != NULL)
 		{
-			if (g_strcmp0 ((gchar *)g_object_get_data (G_OBJECT (group->data), "return-value"), value) == 0)
+			if (g_strcmp0 ((gchar *)g_object_get_data (G_OBJECT (group->data), "return-value"), g_value_get_string (value)) == 0)
 				{
 					gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (group->data), TRUE);
 					break;

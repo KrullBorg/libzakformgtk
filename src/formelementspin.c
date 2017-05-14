@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Andrea Zagli <azagli@libero.it>
+ * Copyright (C) 2015-2017 Andrea Zagli <azagli@libero.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,25 +20,27 @@
 	#include <config.h>
 #endif
 
+#include <libzakutils/libzakutils.h>
+
 #include "formelementspin.h"
 
 static void zak_form_gtk_form_element_spin_class_init (ZakFormGtkFormElementSpinClass *class);
 static void zak_form_gtk_form_element_spin_init (ZakFormGtkFormElementSpin *zak_form_gtk_form_element_spin);
 
 static void zak_form_gtk_form_element_spin_set_property (GObject *object,
-                               guint property_id,
-                               const GValue *value,
-                               GParamSpec *pspec);
+                                                         guint property_id,
+                                                         const GValue *value,
+                                                         GParamSpec *pspec);
 static void zak_form_gtk_form_element_spin_get_property (GObject *object,
-                               guint property_id,
-                               GValue *value,
-                               GParamSpec *pspec);
+                                                         guint property_id,
+                                                         GValue *value,
+                                                         GParamSpec *pspec);
 
 static void zak_form_gtk_form_element_spin_dispose (GObject *gobject);
 static void zak_form_gtk_form_element_spin_finalize (GObject *gobject);
 
-static gchar *zak_form_gtk_form_element_spin_get_value (ZakFormGtkFormElementSpin *element);
-static gboolean zak_form_gtk_form_element_spin_set_value (ZakFormGtkFormElementSpin *element, const gchar *value);
+static GValue *zak_form_gtk_form_element_spin_get_value (ZakFormGtkFormElementSpin *element);
+static gboolean zak_form_gtk_form_element_spin_set_value (ZakFormGtkFormElementSpin *element, GValue *value);
 
 #define ZAK_FORM_GTK_FORM_ELEMENT_SPIN_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT_SPIN, ZakFormGtkFormElementSpinPrivate))
 
@@ -162,28 +164,28 @@ zak_form_gtk_form_element_spin_finalize (GObject *gobject)
 	parent_class->finalize (gobject);
 }
 
-static gchar
+static GValue
 *zak_form_gtk_form_element_spin_get_value (ZakFormGtkFormElementSpin *element)
 {
-	gchar *ret;
+	GValue *ret;
 
 	GtkWidget *w;
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	ret = g_strdup_printf ("%f", gtk_spin_button_get_value (GTK_SPIN_BUTTON (w)));
+	ret = zak_utils_gvalue_new_string (g_strdup_printf ("%f", gtk_spin_button_get_value (GTK_SPIN_BUTTON (w))));
 
 	return ret;
 }
 
 static gboolean
-zak_form_gtk_form_element_spin_set_value (ZakFormGtkFormElementSpin *element, const gchar *value)
+zak_form_gtk_form_element_spin_set_value (ZakFormGtkFormElementSpin *element, GValue *value)
 {
 	GtkWidget *w;
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON (w), g_strtod (value, NULL));
+	gtk_spin_button_set_value (GTK_SPIN_BUTTON (w), g_strtod (g_value_get_string (value), NULL));
 
 	return TRUE;
 }
