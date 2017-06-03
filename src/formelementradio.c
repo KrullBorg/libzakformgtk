@@ -252,8 +252,8 @@ static GValue
 	while (group != NULL)
 		{
 			if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (group->data)))
-				{
-					if ((gchar *)g_object_get_data (G_OBJECT (group->data), "return-value") == NULL)
+				{;
+					if ((gchar *)g_object_get_data (G_OBJECT (group->data), "return-value") != NULL)
 						{
 							g_value_set_string (ret, (gchar *)g_object_get_data (G_OBJECT (group->data), "return-value"));
 						}
