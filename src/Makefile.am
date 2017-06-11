@@ -42,7 +42,7 @@ gir_include = \
 
 libzakformgtk_include_HEADERS = \
                              libzakformgtk.h \
-                             $(git_include)
+                             $(gir_include)
 
 libzakformgtk_includedir = $(includedir)/libzakformgtk
 
