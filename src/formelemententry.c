@@ -66,6 +66,8 @@ zak_form_gtk_form_element_entry_class_init (ZakFormGtkFormElementEntryClass *kla
 	elem_class->get_value = zak_form_gtk_form_element_entry_get_value;
 	elem_class->set_value = zak_form_gtk_form_element_entry_set_value;
 
+	elem_class->xml_parsing = zak_form_gtk_form_element_entry_xml_parsing;
+
 	g_type_class_add_private (object_class, sizeof (ZakFormGtkFormElementEntryPrivate));
 }
 
@@ -97,12 +99,10 @@ ZakFormGtkFormElement
  * @xmlnode:
  *
  */
-gboolean
+void
 zak_form_gtk_form_element_entry_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode)
 {
 	ZAK_FORM_GTK_FORM_ELEMENT_CLASS (zak_form_gtk_form_element_entry_parent_class)->xml_parsing (element, xmlnode);
-
-	return TRUE;
 }
 
 /* PRIVATE */

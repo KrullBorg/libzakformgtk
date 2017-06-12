@@ -72,6 +72,8 @@ zak_form_gtk_form_element_combo_class_init (ZakFormGtkFormElementComboClass *kla
 	elem_class->get_value = zak_form_gtk_form_element_combo_get_value;
 	elem_class->set_value = zak_form_gtk_form_element_combo_set_value;
 
+	elem_class->xml_parsing = zak_form_gtk_form_element_combo_xml_parsing;
+
 	g_type_class_add_private (object_class, sizeof (ZakFormGtkFormElementComboPrivate));
 
 	g_object_class_install_property (object_class, PROP_COLUMN_FIELD,
@@ -113,7 +115,7 @@ ZakFormGtkFormElement
  * @xmlnode:
  *
  */
-gboolean
+void
 zak_form_gtk_form_element_combo_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode)
 {
 	xmlNode *cur;
@@ -130,8 +132,6 @@ zak_form_gtk_form_element_combo_xml_parsing (ZakFormElement *element, xmlNodePtr
 
 			cur = cur->next;
 		}
-
-	return TRUE;
 }
 
 /**
