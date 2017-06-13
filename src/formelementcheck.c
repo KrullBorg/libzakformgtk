@@ -193,30 +193,10 @@ zak_form_gtk_form_element_check_set_value (ZakFormGtkFormElementCheck *element, 
 	GtkWidget *w;
 
 	gboolean active;
-	gchar *str_value;
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	str_value = g_strstrip (g_strdup (g_value_get_string (value)));
-
-	if (strcmp (str_value, "0") == 0
-	    || strcasecmp (str_value, "f") == 0
-	    || strcasecmp (str_value, "false") == 0
-	    || strcasecmp (str_value, "n") == 0
-	    || strcasecmp (str_value, "no") == 0)
-		{
-			active = FALSE;
-		}
-	else if (strcmp (str_value, "1") == 0
-	    || strcasecmp (str_value, "t") == 0
-	    || strcasecmp (str_value, "true") == 0
-	    || strcasecmp (str_value, "y") == 0
-	    || strcasecmp (str_value, "yes") == 0)
-		{
-			active = TRUE;
-		}
-
-	g_free (str_value);
+	active = zak_utils_string_to_boolean (g_value_get_string (value));
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), active);
 
