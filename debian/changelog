@@ -1,10 +1,21 @@
-libzakformgtk (0.0.1-1~1.gbp745740) UNRELEASED; urgency=medium
+libzakformgtk (0.0.1-1~3.gbp114e75) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @745740d9765d79c15516bd8295ebcd16634bc589 **
+  ** SNAPSHOT build @114e75d718c2927a0a74865a73ebdb04acc7b83c **
 
   [ Andrea Zagli ]
   * Initial release
 
   [ tux ]
 
- -- Andrea Zagli <azagli@libero.it>  Sun, 29 May 2016 11:44:29 +0200
+  [ Andrea Zagli ]
+  * Debian pkg: updates from master.
+  * Migration to GValue for element value.
+  * Bugfix: wrong value test.
+  * Enabled gir.
+  * Typo from previous commit.
+  * Make public function ZakFormElement::xml_parsing.
+  * Use of ZakUtils::string_to_boolean in ZakFormGtkFormElementCheck::set_value.
+
+  [ tux ]
+
+ -- tux <tux@develop64.example.tst>  Sat, 24 Jun 2017 11:42:46 +0200

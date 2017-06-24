@@ -1,7 +1,7 @@
 Source: libzakformgtk
 Priority: optional
 Maintainer: Andrea Zagli <azagli@libero.it>
-Build-Depends: debhelper (>=9), libzakutils-dev, intltool, pkg-config, gtk-doc-tools, libzakform-dev, libgtk-3-dev
+Build-Depends: debhelper (>=9), libzakutils-dev, intltool, pkg-config, gtk-doc-tools, gobject-introspection, libgirepository1.0-dev, libzakform-dev, libgtk-3-dev
 Standards-Version: 3.9.8
 Section: libs
 Homepage: https://saetta.ns0.it
