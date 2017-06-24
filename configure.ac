@@ -29,6 +29,8 @@ AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 AC_PROG_RANLIB
 
+GOBJECT_INTROSPECTION_CHECK([1.30.0])
+
 dnl ******************************
 dnl Translations
 dnl ******************************

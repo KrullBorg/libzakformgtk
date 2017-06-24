@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Andrea Zagli <azagli@libero.it>
+ * Copyright (C) 2015-2017 Andrea Zagli <azagli@libero.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -53,7 +53,7 @@ GType zak_form_gtk_form_element_radio_get_type (void);
 
 ZakFormGtkFormElement *zak_form_gtk_form_element_radio_new (void);
 
-gboolean zak_form_gtk_form_element_radio_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode);
+void zak_form_gtk_form_element_radio_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode);
 
 void zak_form_gtk_form_element_radio_set_return_value (ZakFormGtkFormElementRadio *element, const gchar *value);
 gchar *zak_form_gtk_form_element_radio_get_return_value (ZakFormGtkFormElementRadio *element);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Andrea Zagli <azagli@libero.it>
+ * Copyright (C) 2015-2017 Andrea Zagli <azagli@libero.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,25 +20,27 @@
 	#include <config.h>
 #endif
 
+#include <libzakutils/libzakutils.h>
+
 #include "formelementlabel.h"
 
 static void zak_form_gtk_form_element_label_class_init (ZakFormGtkFormElementLabelClass *class);
 static void zak_form_gtk_form_element_label_init (ZakFormGtkFormElementLabel *zak_form_gtk_form_element_label);
 
 static void zak_form_gtk_form_element_label_set_property (GObject *object,
-                               guint property_id,
-                               const GValue *value,
-                               GParamSpec *pspec);
+                                                          guint property_id,
+                                                          const GValue *value,
+                                                          GParamSpec *pspec);
 static void zak_form_gtk_form_element_label_get_property (GObject *object,
-                               guint property_id,
-                               GValue *value,
-                               GParamSpec *pspec);
+                                                          guint property_id,
+                                                          GValue *value,
+                                                          GParamSpec *pspec);
 
 static void zak_form_gtk_form_element_label_dispose (GObject *gobject);
 static void zak_form_gtk_form_element_label_finalize (GObject *gobject);
 
-static gchar *zak_form_gtk_form_element_label_get_value (ZakFormGtkFormElementLabel *element);
-static gboolean zak_form_gtk_form_element_label_set_value (ZakFormGtkFormElementLabel *element, const gchar *value);
+static GValue *zak_form_gtk_form_element_label_get_value (ZakFormGtkFormElementLabel *element);
+static gboolean zak_form_gtk_form_element_label_set_value (ZakFormGtkFormElementLabel *element, GValue *value);
 
 #define ZAK_FORM_GTK_FORM_ELEMENT_LABEL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT_LABEL, ZakFormGtkFormElementLabelPrivate))
 
@@ -63,6 +65,8 @@ zak_form_gtk_form_element_label_class_init (ZakFormGtkFormElementLabelClass *kla
 
 	elem_class->get_value = zak_form_gtk_form_element_label_get_value;
 	elem_class->set_value = zak_form_gtk_form_element_label_set_value;
+
+	elem_class->xml_parsing = zak_form_gtk_form_element_label_xml_parsing;
 
 	g_type_class_add_private (object_class, sizeof (ZakFormGtkFormElementLabelPrivate));
 }
@@ -95,12 +99,10 @@ ZakFormGtkFormElement
  * @xmlnode:
  *
  */
-gboolean
+void
 zak_form_gtk_form_element_label_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode)
 {
 	ZAK_FORM_GTK_FORM_ELEMENT_CLASS (zak_form_gtk_form_element_label_parent_class)->xml_parsing (element, xmlnode);
-
-	return TRUE;
 }
 
 /* PRIVATE */
@@ -162,24 +164,24 @@ zak_form_gtk_form_element_label_finalize (GObject *gobject)
 	parent_class->finalize (gobject);
 }
 
-static gchar
+static GValue
 *zak_form_gtk_form_element_label_get_value (ZakFormGtkFormElementLabel *element)
 {
 	GtkWidget *w;
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	return (gchar *)gtk_label_get_text (GTK_LABEL (w));
+	return zak_utils_gvalue_new_string ((gchar *)gtk_label_get_text (GTK_LABEL (w)));
 }
 
 static gboolean
-zak_form_gtk_form_element_label_set_value (ZakFormGtkFormElementLabel *element, const gchar *value)
+zak_form_gtk_form_element_label_set_value (ZakFormGtkFormElementLabel *element, GValue *value)
 {
 	GtkWidget *w;
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	gtk_label_set_text (GTK_LABEL (w), value);
+	gtk_label_set_text (GTK_LABEL (w), g_value_get_string (value));
 
 	return TRUE;
 }

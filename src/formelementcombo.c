@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Andrea Zagli <azagli@libero.it>
+ * Copyright (C) 2016-2017 Andrea Zagli <azagli@libero.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,8 @@
 	#include <config.h>
 #endif
 
+#include <libzakutils/libzakutils.h>
+
 #include "formelementcombo.h"
 
 enum
@@ -32,19 +34,19 @@ static void zak_form_gtk_form_element_combo_class_init (ZakFormGtkFormElementCom
 static void zak_form_gtk_form_element_combo_init (ZakFormGtkFormElementCombo *zak_form_gtk_form_element_combo);
 
 static void zak_form_gtk_form_element_combo_set_property (GObject *object,
-                               guint property_id,
-                               const GValue *value,
-                               GParamSpec *pspec);
+                                                          guint property_id,
+                                                          const GValue *value,
+                                                          GParamSpec *pspec);
 static void zak_form_gtk_form_element_combo_get_property (GObject *object,
-                               guint property_id,
-                               GValue *value,
-                               GParamSpec *pspec);
+                                                          guint property_id,
+                                                          GValue *value,
+                                                          GParamSpec *pspec);
 
 static void zak_form_gtk_form_element_combo_dispose (GObject *gobject);
 static void zak_form_gtk_form_element_combo_finalize (GObject *gobject);
 
-static gchar *zak_form_gtk_form_element_combo_get_value (ZakFormGtkFormElementCombo *element);
-static gboolean zak_form_gtk_form_element_combo_set_value (ZakFormGtkFormElementCombo *element, const gchar *value);
+static GValue *zak_form_gtk_form_element_combo_get_value (ZakFormGtkFormElementCombo *element);
+static gboolean zak_form_gtk_form_element_combo_set_value (ZakFormGtkFormElementCombo *element, GValue *value);
 
 #define ZAK_FORM_GTK_FORM_ELEMENT_COMBO_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), ZAK_FORM_GTK_TYPE_FORM_ELEMENT_COMBO, ZakFormGtkFormElementComboPrivate))
 
@@ -69,6 +71,8 @@ zak_form_gtk_form_element_combo_class_init (ZakFormGtkFormElementComboClass *kla
 
 	elem_class->get_value = zak_form_gtk_form_element_combo_get_value;
 	elem_class->set_value = zak_form_gtk_form_element_combo_set_value;
+
+	elem_class->xml_parsing = zak_form_gtk_form_element_combo_xml_parsing;
 
 	g_type_class_add_private (object_class, sizeof (ZakFormGtkFormElementComboPrivate));
 
@@ -111,7 +115,7 @@ ZakFormGtkFormElement
  * @xmlnode:
  *
  */
-gboolean
+void
 zak_form_gtk_form_element_combo_xml_parsing (ZakFormElement *element, xmlNodePtr xmlnode)
 {
 	xmlNode *cur;
@@ -128,8 +132,6 @@ zak_form_gtk_form_element_combo_xml_parsing (ZakFormElement *element, xmlNodePtr
 
 			cur = cur->next;
 		}
-
-	return TRUE;
 }
 
 /**
@@ -226,10 +228,10 @@ zak_form_gtk_form_element_combo_finalize (GObject *gobject)
 	parent_class->finalize (gobject);
 }
 
-static gchar
+static GValue
 *zak_form_gtk_form_element_combo_get_value (ZakFormGtkFormElementCombo *element)
 {
-	gchar *ret;
+	GValue *ret;
 
 	GtkWidget *w;
 	GtkTreeModel *tmodel;
@@ -243,7 +245,7 @@ static gchar
 
 	w = zak_form_gtk_form_element_get_widget (ZAK_FORM_GTK_FORM_ELEMENT (element));
 
-	ret = g_strdup ("");
+	ret = zak_utils_gvalue_new_string ("");
 
 	tmodel = gtk_combo_box_get_model (GTK_COMBO_BOX (w));
 	if (tmodel != NULL)
@@ -259,7 +261,7 @@ static gchar
 					g_value_transform (gvalue, gvstr);
 
 					g_free (ret);
-					ret = g_strdup (g_value_get_string (gvstr));
+					g_value_set_string (ret, g_strdup (g_value_get_string (gvstr)));
 
 					g_value_unset (gvstr);
 					g_value_unset (gvalue);
@@ -270,7 +272,7 @@ static gchar
 }
 
 static gboolean
-zak_form_gtk_form_element_combo_set_value (ZakFormGtkFormElementCombo *element, const gchar *value)
+zak_form_gtk_form_element_combo_set_value (ZakFormGtkFormElementCombo *element, GValue *value)
 {
 	GtkWidget *w;
 
@@ -300,7 +302,7 @@ zak_form_gtk_form_element_combo_set_value (ZakFormGtkFormElementCombo *element, 
 
 							g_value_init (gvstr, G_TYPE_STRING);
 							g_value_transform (gvalue, gvstr);
-							if (g_strcmp0 (g_value_get_string (gvstr), value) == 0)
+							if (g_strcmp0 (g_value_get_string (gvstr), g_value_get_string (value)) == 0)
 								{
 									gtk_combo_box_set_active_iter (GTK_COMBO_BOX (w), &iter);
 
