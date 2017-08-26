@@ -29,8 +29,7 @@ libzakformgtk_la_SOURCES = \
 
 libzakformgtk_la_LDFLAGS = -no-undefined
 
-libzakformgtk_include_HEADERS = \
-                             libzakformgtk.h \
+gir_include = \
                              form.h \
                              formelement.h \
                              formelementcheck.h \
@@ -41,6 +40,10 @@ libzakformgtk_include_HEADERS = \
                              formelementspin.h \
                              formelementtextview.h
 
+libzakformgtk_include_HEADERS = \
+                             libzakformgtk.h \
+                             $(gir_include)
+
 libzakformgtk_includedir = $(includedir)/libzakformgtk
 
 install-exec-hook:
@@ -49,3 +52,29 @@ install-exec-hook:
 
 uninstall-hook:
 	rm -f $(libzakformmodulesdir)/libzakformgtk$(libmodulesext)
+
+CLEANFILES =
+
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = --add-include-path=$(srcdir) --warn-all
+INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
+
+if HAVE_INTROSPECTION
+introspection_sources = $(libzakformgtk_la_SOURCES) $(gir_include)
+
+ZakFormGtk-1.0.gir: libzakformgtk.la
+ZakFormGtk_1_0_gir_INCLUDES = Gtk-3.0 ZakForm-1.0
+ZakFormGtk_1_0_gir_CFLAGS = $(AM_CPPFLAGS)
+ZakFormGtk_1_0_gir_LIBS = libzakformgtk.la
+ZakFormGtk_1_0_gir_FILES = $(introspection_sources)
+INTROSPECTION_GIRS += ZakFormGtk-1.0.gir
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = $(INTROSPECTION_GIRS)
+
+typelibdir = $(libdir)/girepository-1.0
+typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+CLEANFILES += $(gir_DATA) $(typelib_DATA)
+endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Andrea Zagli <azagli@libero.it>
+ * Copyright (C) 2015-2017 Andrea Zagli <azagli@libero.it>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,8 @@
 #ifdef HAVE_CONFIG_H
 	#include <config.h>
 #endif
+
+#include <glib/gi18n-lib.h>
 
 #include "formelement.h"
 
@@ -408,8 +410,6 @@ zak_form_gtk_form_element_xml_parsing (ZakFormElement *element, xmlNode *xmlnode
 	xmlNode *cur;
 
 	ZakFormGtkFormElementPrivate *priv = ZAK_FORM_GTK_FORM_ELEMENT_GET_PRIVATE ((ZakFormGtkFormElement *)element);
-
-	ZAK_FORM_ELEMENT_GET_CLASS (element)->xml_parsing (element, xmlnode);
 
 	cur = xmlnode->children;
 	while (cur != NULL)
